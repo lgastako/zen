@@ -1,0 +1,41 @@
+Zen is a programing language that is:
+    - Functional
+    - Expressive
+    - Object oriented
+	- Garbage Collected
+	- Strongly, statically typed (with HMD type inference)
+	- Boilerplate free / expressive
+	- LLVM based
+	- Completely specified
+And has:
+    - Named parameters with optional default values
+    - Integers of unlimited range
+    - A single floating point / rational type which is a IEEE 754 double
+    - Great documentation (!)
+    - Multi-line lambdas
+    - Rich/easy/good unicode support
+    - A simple module system
+    - A powerful packaging system
+    - A powerful FFI
+    - A powerful concurrency model ... ????
+	- varargs
+	- Java-like doc-strings
+	- Python-like doctests
+    - Python-like slicing
+    - No exceptions.  Exceptional/error conditions are handled by ... ? Option/Maybe/Either? Breakable?
+	- support for she-bang scripts
+	- runtime assertions that can be "compiled out"
+And the following built-in tools:
+	- Compiler
+	- Documentation Generator
+	- Syntax High-lighter
+    - A powerful (time traveling?) debugger.
+And a rich stdlib that:
+    - Includes powerful "smart" data structures (like obj-c's smart hashmap that swaps out impl behind scenes)
+    - Includes both immutable (persistent) data structures and traditional mutable structures
+  	- Is consistent and well thought out(e.g. in terms of argument order, etc) and not "messy" like, e.g. PHP
+    - Comes with first class HTTP/Web support baked in
+    - Comes with a JDBC-like database connectivity library (can use JDBC?)
+And LACKS:
+    - Exceptions. Exceptional/error conditions are most commonly handled by Breakable's in practice. In general these types of situations are handled by other more sophisticated forms like Option/Maybe/Either.
+    - Null.  Handled via Maybe.
