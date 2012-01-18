@@ -1,0 +1,100 @@
+# Creation of a value
+number = 42                     # number:Int = 42
+opposite = true                 # opposite:Bool = true
+
+
+# Conditions
+number = -42 if opposite        # number:Int = -42 if opposite
+number = 69 unless opposite     # number:Int = 69 unless opposite
+
+
+# Functions
+square = (x) -> x * x           # square = (x:Int):Int -> x * x
+
+
+# Lists
+list = [1, 2, 3, 4, 5]          # list:List[Int] = [1, 2, 3, 4, 5]
+
+
+# Classes
+class Math                      # Math:class = Class.new("Math", [
+    root = Math.sqrt            #     (root, Math.sqrt),
+    square = square             #     (square, square),
+    cube = (x) -> x * square x  #     (cube, (x:Num) -> x * square x) ])
+
+
+# Splats
+race = (winner, runners...) ->  # race:(Str, List[Str]...):unit = (winner:Str, runners:List[Str]...):unit -> 
+  print winner, runners
+
+# Existence
+# Not necessary inherently since names are immutably bound to values at
+# declaration time they cannot change.  References are the mechanism for
+# mutability and provide their own existence/null checks.
+
+# Array comprehensions:
+cubes = (math.cube num for num in list)
+                                # cubes:List[Int] = (math.cube
+                                                     for num from list)
+
+
+# Functions
+square = (x) -> x * x           # square:(Num):Num = (x:Num):Num -> x * x
+cube = (x) -> square(x) * x     # cube:(Num):Num = (x:Num):Num -> square(x) * x
+
+# Zen only - 
+# All parameters are named, so you can invoke the above like so:
+#
+# square x=5  # returns 25
+# cube x=6    # returns 216
+
+# Functions may also have default values for arguments:
+fill = (container, liquid="coffee") -> 
+  "Filling the #{container} with #{liquid}..."
+                                # fill:(Str, Str):Str = (container:Str, liquid:Str="coffee"):Str ->
+                                    "Filling the #{container} with #{liquid}..."
+
+# Notice string interpolation.
+
+# Objects and arrays
+song = ["do", "re", "mi", "fa", "so"]
+                                # song:List[Str] = ["do", "re", "mi", "fa", "so"]
+
+singers = {"Jagger": "Rock", "Elvis": "Roll"}
+                                # singers:{Str}:Str = {"Jagger": "Rock", "Elvis": "Roll"}
+
+bits = [                        # bitList:List[Int] = [1, 0, 1, 0, 0, 1, 1, 1, 0]
+    1, 0, 1
+    0, 0, 1
+    1, 1, 0
+]
+
+
+Kids =                          # Kids:Class = Class.new("kids", [
+  Brother =                     #     ("Brother", Class.new("Brother", [
+    name: "Max"                 #         ("name", None, "Max"),
+    age:  11                    #         ("age", None, 11)])),
+  Sister =                      #     ("Sister", Class.new("Sister", [
+    name: "Ida"                 #         ("name", None, "Ida"),
+    age:  9                     #         ("age", None, 9)]))])
+
+# Of course you wouldn't really do this, you'd do something like:
+
+class Person
+    name:Str
+    age:Int
+
+kids = {"brother": Person.new "Max" 11,
+        "sister": Person.new "Ida" 9}
+                                # kids:{Str}:Person = {"brother": Person.new "Max" 11,
+                                                       "sister": Person.new "Ida" 9}
+
+# All scoping is lexical, but you can't rebind values 
+outer = 1                       # outer:Int = 1
+changeNumbers = ->              # changeNumbers:():unit = ():unit ->
+  inner = -1                    #     inner:Int = -1
+  outer = 10                    #     outer:Int = 10
+inner = changeNumbers()         # 
+
+# And in Zen capitalized names are constant/final/val Values, whereas
+# lower case are... mutable?
