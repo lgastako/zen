@@ -1,11 +1,20 @@
 Function syntax from CoffeeScript:
 	add = (a, b) -> a + b
 
+typed:
+	add = (a:Int, b:Int):Int -> a + b
+
 Value of function is value of last expression in function body, ala ruby, Coffee, etc.
 	three = () ->
 		1
 		2
 		3
+
+typed:
+	three = ():Int ->
+	    1
+	    2
+	    3
 
 Semicolons to stack statements on a line, the last example can be rewritten as:
 
@@ -14,12 +23,13 @@ Semicolons to stack statements on a line, the last example can be rewritten as:
 Of course both should be optimized by the compiler down to:
 
 	three = 3
+	three:Int = 3
 
 Function application is left to right ala haskell:
 
-	f g h x    // is equivalent to  f (g (h x))
+	f g h x    # is equivalent to  f (g (h x))
 
-As you may have noticed, we use C style comments. // for single-line, /* for multi-line */
+As you may have noticed, we use python style comments.
 
 Every statement returns a value, including e.g. "if":
 
@@ -37,6 +47,10 @@ something like:
 
 	sayHappyBirthday = (name="Dave", age=21)  # -> puts "Hello #{name}, congratulations on turning #{age}!"
 
+typed:
+	sayHappyBirthday = (name:Str="DavE", age:Int=21):str
+
+invoked:
 	sayHappyBirthday                          # -> "Hello Dave, congratulations on turning 21"
 	sayHappyBirthday age=36                   # -> "Hello Dave, congratulations on turning 36"
 	sayHappyBirthday name="Bob"               # -> "Hello Bob, congratulations on turning 21"
@@ -46,9 +60,16 @@ something like:
 
 [TODO: Discuss constructors, default constructors, merged constructors]
 
-Construction occurs via the new keyword:
+Construction occurs via constructor class methods:
 
-	person = new Person
+	class Person
+		first:Str
+		last:Str
+		full = -> first + " " + last
+
+		make = (first:Str, last:Str)
+
+	person = Person.make()
 
 Instance and class methods use python-like self and cls parameter names but the 
 parameter names themselves are meaningful:
@@ -61,7 +82,7 @@ parameter names themselves are meaningful:
 
 String interpolation ala CoffeeScript, etc.	
 
-	val name = "John"
+	name = "John"
 	puts "Hello, #{name}!"
 
 Also % formatting ala python:
