@@ -19,7 +19,7 @@ Function application is left to right ala haskell:
 
 	f g h x    // is equivalent to  f (g (h x))
 
-As you may have noticed, we use C style comments. // for single-line, /* for multi-line */
+As you may have noticed, we use shell style comments. # everything after the pound is ignored
 
 Every statement returns a value, including e.g. "if":
 
@@ -50,7 +50,7 @@ Construction occurs via the new keyword:
 
 	person = new Person
 
-Instance and class methods use python-like self and cls parameter names but the 
+Instance and class methods use python-like self and cls parameter names but the
 parameter names themselves are meaningful:
 
 	class Foo
@@ -59,7 +59,7 @@ parameter names themselves are meaningful:
 		addN = (self, a) -> a + self.n
 		addCls = (cls, a) -> a + a  # cls ignored, lame example. TODO fix
 
-String interpolation ala CoffeeScript, etc.	
+String interpolation ala CoffeeScript, etc.
 
 	val name = "John"
 	puts "Hello, #{name}!"
@@ -108,7 +108,7 @@ could specify just the type for name, e.g.:
 On the other hand, if there were a usage that constrained name to being a string then
 the compiler would infer the type automatically, e.g. this definition gets the
 proper types as expected since only Strings can be added to other strings (and
-the " " empty string is enough to pin down both parameter types and the "Mr. " + 
+the " " empty string is enough to pin down both parameter types and the "Mr. " +
 further pins down the type of the lastName parameter.
 
 	sayHello = (firstName, lastName) ->
@@ -177,12 +177,12 @@ In fact, we even dispatch on return type:
 		req score:Int
 		bar = (self, n:Int):Int -> score + n
 		bar = (self, n:Int):Str -> "(as a string: " + (toStr (bar n)) + ")"
-	
+
 	foo = new Foo 4
 	foo.bar 6									# compile error, no clues as to return type.
 	puts "The bar is " + foo.bar 6  			# will be return type string
 	val z = 8 * foo.bar(6)						# will be return type Int
-	
+
 	# Watch out for gotchas:
 	puts "The bar is %d" % foo.bar 6			# "The bar is 10"
 	puts "The bar is %s" % foo.bar 6			# "(as a string: 10)"
@@ -208,7 +208,7 @@ Can use point free style:
 
 Scoping / Closures:
 
-At the top level, it's really like you are extending the Kernel object.... 
+At the top level, it's really like you are extending the Kernel object....
 
 	val AGE_LIMIT = 21
 
@@ -264,7 +264,7 @@ However you can also just use let (which is basically just syntactic sugar for t
 	val checkAge = (age, limit=AGE_LIMIT) -> age > limit
 	val checkAgeOfCurrentUser = ->
 		user = getCurrentUser()
-		let AGE_LIMIT = 99, 
+		let AGE_LIMIT = 99,
 			_ignoredValue = 6
 		in
 			a = checkAge user.Age, AGE_LIMIT
@@ -272,7 +272,7 @@ However you can also just use let (which is basically just syntactic sugar for t
 
 Again, poor example, but we redeclare AGE_LIMIT as 99 but it's already closed over in the definition of checkAge
 so in the first call (assignment to 'a'), the local AGE_LIMIT value of 99 is used and passed as the second
-parameter which in turn gets bound to "limit" in the function call.  In the second call (assignment to 'b'), 
+parameter which in turn gets bound to "limit" in the function call.  In the second call (assignment to 'b'),
 the AGE_LIMIT variable is closed over in the current scope but the call does not pass it in, so when the
 checkAge function executes it uses the value from the environment it was defined in an binds limit to 21.
 
