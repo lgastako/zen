@@ -8,11 +8,13 @@
 (defn eval [s]
   (->> (parse s)
        (insta/transform {:integer clojure.edn/read-string
+                         :decimal clojure.edn/read-string
+                         :boolean clojure.edn/read-string
                          :name str})))
 
-;; lambda = λ name . expr
 ;; let = <'let'> (indented-arg-list | unindented-arg-list) <'in'> expr
-;; alphanum = letter | digit
-;; name = letter alphanum*
-;; lambda = λ name . expr
-;; expr = name | value
+;; application = f expr
+;; f           = name | lambda
+;; lambda      = <'λ'> <whitespace> expr <whitespace> <'.'> <whitespace> body
+;; name        = letter alphanum*
+;; body        = value | name
