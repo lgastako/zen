@@ -1,24 +1,18 @@
 (ns zen.core
-  (:require [instaparse.core :as insta]))
+  (:require [clojure.java.io :as io]
+            [instaparse.core :as insta]))
 
 (def parse
-  (insta/parser
-   "NAME = ...
-    EXPR = FUNC | NAME | APPL
-    FUNC = λ NAME . EXPR"))
+  (insta/parser (io/resource "zen.bnf")))
 
-;; (def as-and-bs
-;;   (insta/parser
-;;    "S = AB*
-;;     AB = A B
-;;     A = 'a'+
-;;     B = 'b'+"))
+(defn eval [s]
+  (->> (parse s)
+       (insta/transform {:integer clojure.edn/read-string
+                         :name str})))
 
-;; ;; => (as-and-bs "aaaaabbbaaaabb")
-;; ;; [:S
-;; ;;  [:AB [:A "a" "a" "a" "a" "a"] [:B "b" "b" "b"]]
-;; ;;  [:AB [:A "a" "a" "a" "a"] [:B "b" "b"]]]
-
-;; [:S
-;;  [:AB [:A "a" "a" "a" "a" "a"] [:B "b" "b" "b"]]
-;;   [:AB [:A "a" "a" "a" "a"] [:B "b" "b"]]
+;; lambda = λ name . expr
+;; let = <'let'> (indented-arg-list | unindented-arg-list) <'in'> expr
+;; alphanum = letter | digit
+;; name = letter alphanum*
+;; lambda = λ name . expr
+;; expr = name | value

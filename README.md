@@ -59,11 +59,16 @@ returns a byte.
         Δshow-color (r,g,b) = print (str (color-on r g b)
                                          (color-off)
     in λmain args. case (count args)
-      1 (print (fib (to-int (first args))))
-      2 (print (add (to-int (first args))
-                    (to-int (second args))))
-      3 (show-color (map to-int args))
+      1 print (fib (to-int (first args)))
+      2 print (add (to-int (first args))
+                   (to-int (second args)))
+      3 show-color (map to-int args)
       _ usage
+
+NB. When the idented form of the case statement is used (as in `Δmain` above)
+it is assumed that there is one case clause per line so the outermost set of
+parentheses around the case body can be dropped.  When the inline form is used
+the extra paranetheses must be used.
 
 The delta symbol signifies an IO action and this is the abbreviated form
 similar to `λadd` etc.  The long form of the above main would be:
@@ -77,6 +82,23 @@ to constants), IO actions can take zero or more.
 
 The `show-color` action shows destructuring.
 
-Add all of clojure's persistent data structures with identical syntax (EDN).
+Add Clojure keyword and all of Clojure's persistent data structures with
+identical syntax (EDN) including first class support for `#queue []` syntax
+from ClojureScript.
 
-And the addition of #queue [] like cljs.
+     let defaults = {:a 1 :b "string" :c "Copyright 2077. Whoever"}
+     in → defaults
+          dissoc :a :b
+          assoc :name "John"
+
+     # {:name "John" :c "Copyright 2077. Whoever"}
+
+The above demonstrates the "thread-first" (→) macro.  Here is "thread-last" (⇒):
+
+     ⇒ ["john" "jacob" "jingleheimer-schmidt"]
+       filter (λ s . < (count s) 10)
+       map upper-case
+       reverse
+
+     # ["JACOB" "JOHN"]
+

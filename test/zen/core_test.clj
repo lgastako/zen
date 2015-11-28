@@ -1,7 +1,13 @@
 (ns zen.core-test
   (:require [clojure.test :refer :all]
-            [zen.core :refer :all]))
+            [zen.core :as zen]))
 
-(deftest a-test
-  (testing "FIXME, I fail."
-    (is (= 0 1))))
+(deftest parse-test
+  (is (= '([:integer "1"])
+         (zen/parse "1"))))
+
+(deftest parse-eval
+  (is (= '(1)
+         (zen/eval "1"))))
+
+(run-tests)

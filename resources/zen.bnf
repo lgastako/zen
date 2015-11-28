@@ -1,0 +1,15 @@
+<prog>      = expr (<whitespace> expr)*
+whitespace  = #'\s+'
+<value>     = integer | decimal | boolean
+integer     = digit+
+boolean     = 'true' | 'false'
+decimal     = #'[0-9]+\.[0-9]+'
+<digit>     = #'[0-9]'
+<letter>    = #'[a-zA-Z]'
+<alphanum>  = letter | digit
+<expr>      = value | application
+application = f expr
+f           = name | lambda
+lambda      = 'λ' expr <'.'> body
+name        = letter alphanum*
+body        = name | value
