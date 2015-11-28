@@ -1,135 +1,82 @@
 # zen
 
-Zen is my programming language.  My goal is to inbue it with as much goodness
-from as many other programing languages (and my brain) as possible (while
-learning from their mistakes and sanding off their respective rough edges
-wherever possible).
+README driven development:
 
-This README is the beginning of my README-driven develop of the language.  As
-of this initial writing (Thanksgiving 2015) none of this actually exists.
+Zen starts with the lambda calculus.
 
-## Goals
-
-I am trying to implement a language that...
-- is as clean and easy to read/maintain as python, elixir, coffeescript, etc.
-- has the benefits of strong static typing ala Haskell
-
-Zen:
-- is functional (specifically based on the lambda calculus)
-- is statically typed
-- steals Clojure's numbers
-- has no "nil" / "null" (except maybe in JAVA/CLJ interop, how to limit it to that?)
-- has powerful (and easy!) concurrency primitives
-- has python-like slicing
-- has runtime assertions that can be compiled out
-- has a powerful and consistent standard library
-- eschews (or hides) esoteric PLT BS
-
-Goals:
-- Great thorough documentation with great examples
-- Amazing unicode support
-
-## Introduction
-
-At it's core Zen consists of an implementation of the lambda calculus
-affectionately called "Z".
-
-Zen comprises a set of additions to Z and associated tooling designed to make
-programming in it not just managable but fun and productive.
-
-## Z
-
-Any discussion of the lambda calculus worth it's salt begins with the identity
-function.
-
-### The Identity Function
-
-The identity function in Z looks like this:
+The identity function:
 
     λ x . x
 
-As we all know, the identity function returns it's argument unchanged.  All
-functions in Z are anonymous.  (Don't worry, Zen adds named functions).
-
-Function application is accomplished by adjacency (with appropriate
-disamibiguating parens:
-
-For example, to invoke the identity function above on itself, one would write:
+Apply it to itself:
 
     (λ x . x)(λ x . x)
 
-As Z is intended to be a minimal implementation of the lambda calculus it does
-not contain such niceties as numbers.
+Church Numerals, Peano arithmetic, etc.
 
-As mandated by the PLT Overseers, we will now commence a discussion of how to
-implemenet integers via Church Numerals.  But don't worry, Zen adds a powerful
-numeric tower on top of Z.
+Add auto-currying and `let` and Clojure numbers:
 
-### Church Numerals
+    let add = λ a b . + a b
+        inc = λ n . + 1 n
+        dub = λ n . * 2 n
+    in add (dub 3) (inc 2)      # returns 9
 
-In the following, `s` stands for successor and `z` stands for zero.
+To expose something at the module level:
 
-0 = λ s . λ  z . z       # the function s applied to the argument z zero times
-1 = λ s . λ z . s z      # the function s applied once
-2 = λ s . λ z . s (s z)  # the function s applied twice
+    fib = λ n . case n
+      0 1
+      1 1
+      n (+ (fib (- n 1)))
 
-Given this encoding we can define an "inc" function which adds 1 to it's
-argument like so:
+This demonstrates the usage of the case statement.  Module level bindings
+behave as if "declared" in Clojure -- meaning an function can recurse by
+calling itself.
 
-    λ n . λ s . λ z . s (n s z)
+The case statment ends either based on indentation (as in the definition of
+`fib` above) or when encountering the end of the line, like so:
 
-And an add function like so:
+    zero? = λ n. case n 0 true _ false
 
-    λ a . λ b . λ s . λ z . a s (b s z)
+You can declare functions using the shorter form demonstrated in this
+definition of `non-zero?` which is equivalent in spirit to the definition of
+`zero?` above.
 
-### Zen
+    λnon-zero? n. case n 0 false _ true
 
-Like the lambda calculus, functions in Z always take exactly one argument, like
-all of the functions discussed in the Z section.
+Behind the scenes everyting is statically typed.
 
-Zen adds
+Defining the entry point to a command line app is done by binding `main` at the
+module level to an IO action which takes an argument list (of strings) and
+returns a byte.
 
-Consider the following "add" functions in various languages:
+    let Δusage = "Usage:
+      main n        Show fibonacci number <n>.
+      main a b      Add <a> and <b>
+      main r g b    Show the color <r,g,b>
+    "
+        begin-color = ...
+        end-color = ...
+        Δshow-color (r,g,b) = print (str (color-on r g b)
+                                         (color-off)
+    in λmain args. case (count args)
+      1 (print (fib (to-int (first args))))
+      2 (print (add (to-int (first args))
+                    (to-int (second args))))
+      3 (show-color (map to-int args))
+      _ usage
 
-```javascript
-function(a, b) {
-    return a + b;
-}
-```
-```java
-static int add(Integer a, Integer b) {
-    return a + b;
-}
-```
-```python
-def add(a, b):
-    return a + b
-```
-```clojure
-(fn [a b] (+ a b))
-```
-```haskell
-add a b = a + b
-```
+The delta symbol signifies an IO action and this is the abbreviated form
+similar to `λadd` etc.  The long form of the above main would be:
 
-This would be the (approximately) equivalent "add" function in Z:
+      ...
+    in main = λ args. case (count args)
+      ...
 
-    λ a . λ b . + a b
+While functions must take at least one argument (zero argument functions reduce
+to constants), IO actions can take zero or more.
 
-All of these Z expressions define (approximately) equivalent "add" functions:
+The `show-color` action shows destructuring.
 
-    λ a . λ b . + a b
+Add all of clojure's persistent data structures with identical syntax (EDN).
 
-    λ a . λ b . a + b
-
-    λ a b . a + b
-
-Here we see our first hint that everything is not what it seems.  The lambda
-calculus does not define a math notation like `a + b`.
-
-
-This expression defines a function which takes an argument `a` and returns a
-function that takes an argument `b` and adds the two numbers together.
-
-In order to understand what's going on here you need to know that everything is
-a function in Zen.  Specifically, numbers are functions.
+And the addition of #queue [] like cljs.
