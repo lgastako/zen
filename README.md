@@ -43,7 +43,7 @@ definition of `non-zero?` which is equivalent in spirit to the definition of
 
     λnon-zero? n. case n 0 false _ true
 
-Behind the scenes everyting is statically typed.
+Behind the scenes everything is statically typed.
 
 Defining the entry point to a command line app is done by binding `main` at the
 module level to an IO action which takes an argument list (of strings) and
@@ -102,3 +102,8 @@ The above demonstrates the "thread-first" (→) macro.  Here is "thread-last" (�
 
      # ["JACOB" "JOHN"]
 
+## References:
+
+- http://plato.stanford.edu/entries/lambda-calculus/
+- https://medium.com/@ayanonagon/the-y-combinator-no-not-that-one-7268d8d9c46#.9slkh6jwz
+- https://en.wikipedia.org/wiki/Lambda_calculus#Logic_and_predicates
